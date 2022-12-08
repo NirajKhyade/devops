@@ -6,16 +6,27 @@ pipeline {
      stages{
          stage('Build Maven'){
              steps{
-                 checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsDocker']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NirajKhyade/devops.git']]])
-                 sh 'mvn clean install'
+                checkout([$class: 'GitSCM', branches: [[name: '*/CICD']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NirajKhyade/devops.git']]])
+                sh 'mvn clean install'
              }
         }
-         stage('Build docker image'){
-             steps{
+         stage('Build Docker Image'){
+            steps{
                 script{
-                    sh 'docker build -t nirajkhyade/jenkins .'
+                    sh 'docker build -t nirajkhyade/seleniumimage .'
                 }
              }
             }
+         stage('Push Selenium Docker Image'){
+             steps{
+                 script{
+                      withCredentials([string(credentialsId: 'userid', variable: 'uid'), string(credentialsId: 'password', variable: 'pass')]) {
+                      sh 'docker login -u ${uid} -p ${pass}'
+                      sh 'docker push ${uid}/jenkins_docker'
+}
+
+                 }
+             }
+         }
         }
 }

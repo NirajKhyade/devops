@@ -158,7 +158,7 @@
                 <version>3.0.1</version>
             </plugin>
         </plugins>
-        <finalName>Jenkins_Docker</finalName>
+        <finalName>SeleniumImage</finalName>
     </build>
 
 </project>
